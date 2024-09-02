@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
+
+</head>
+    <div class="login-container">
+        <div class="login-form">
+            <h2>Welcome</h2>
+            <p>Please enter your mobile number to log in</p>
+            <form id="loginForm" action="login.php" method="post">
+                <label for="CC">Country Code</label>
+                <input type="text" id="CC" name="CC" required placeholder="Enter Country Code">
+                <label for="mobile">Mobile Number</label>
+                <input type="tel" id="mobile" name="mobile" required placeholder="Enter your mobile number">
+                <input type="hidden" name="action" value="Login">
+                <input type="submit" value="Login">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            
+            var formData = new FormData(this);
+            var CC = document.getElementById('CC').value;
+            var mobile = document.getElementById('mobile').value;
+            
+            // Store CC and mobile in sessionStorage
+            sessionStorage.setItem('CC', CC);
+            sessionStorage.setItem('mobile', mobile);
+
+            fetch('http://localhost/login/login.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Redirect to verify.html
+                    window.location.href = 'verify.html';
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+</script>
+    </body>
+</html>

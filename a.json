@@ -1,0 +1,126 @@
+I am sending a bunch of code elaborate what it is "{
+	"info": {
+		"_postman_id": "426b0a51-d310-4671-8e9c-a8a6c306345a",
+		"name": "Lead Fusion",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22272194",
+		"_collection_link": "https://lead-fusion.postman.co/workspace/Lead-Fusion-Workspace~e12a8d81-ec4e-411c-b1dd-71a0807b2253/collection/22272194-426b0a51-d310-4671-8e9c-a8a6c306345a?action=share&source=collection_link&creator=22272194"
+	},
+	"item": [
+		{
+			"name": "AccountCreation ✔️",
+			"item": [
+				{
+					"name": "Send Otp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"country_code\": \"+91\",\r\n  \"mobile_number\": \"6396294553\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{df}}/api/v1/send-otp",
+							"host": [
+								"{{df}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"send-otp"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Otp",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "device-type",
+								"value": "Mobile",
+								"description": "MOBILE   WEB"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"country_code\":\"+91\",\r\n  \"mobile_number\":\"6396294553\",\r\n  \"otp\": 4821\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{df}}/api/v1/verify-otp",
+							"host": [
+								"{{df}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"verify-otp"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Profile Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "device-type",
+								"value": "Mobile"
+							},
+							{
+								"key": "",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{$randomFullName}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"company\": \"{{$randomCompanyName}}\",\r\n    \"state\": \"California\",\r\n    \"city\": \"{{$randomCity}}\",\r\n    \"sponsor_code\": \"ABC123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{df}}/api/v1/create-profile",
+							"host": [
+								"{{df}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"create-profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
