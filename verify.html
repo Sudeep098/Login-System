@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- OTP verification form container -->
+    <div class="otp-container login-container">
+        <div class="otp-form login-form">
+            <h2>Verify Your Number</h2>
+            <p>Enter the OTP sent to your email</p>
+            <!-- OTP verification form -->
+            <form id="verifyForm" method="post">
+                <!-- OTP input field -->
+                <label for="otp">Enter OTP</label>
+                <input type="text" id="otp" name="otp" required placeholder="Enter the OTP">
+                
+                <!-- Hidden fields to carry data from session storage -->
+                <input type="hidden" id="CC" name="CC">
+                <input type="hidden" id="mobile" name="mobile">
+
+                <!-- Submit button -->
+                <input type="submit" value="Verify OTP">
+            </form>
+        </div>
+    </div>
+
+    <!-- Script to handle the form submission -->
+    <script>
+        // Set values for hidden input fields from session storage
+        document.getElementById('CC').value = sessionStorage.getItem('CC');
+        document.getElementById('mobile').value = sessionStorage.getItem('mobile');
+
+        document.getElementById('verifyForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            var formData = new FormData(this);
+
+            // Send the data to verify.php using fetch
+            fetch('http://localhost/login/verify.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json()) // Parse the response as JSON
+            .then(data => {
+                // console.log(typeof(data))
+                console.log(data)
+                if (data.success === true) { // Check if verification was successful
+                    sessionStorage.setItem('access_token', data.access_token);
+                    if (data.profile_created === false) {
+                        // Redirect to profile creation page if profile is not created
+                        window.location.href = 'update-profile.html';
+                    } else {
+                        // Redirect to welcome page if profile is created
+                        window.location.href = 'welcome.html';
+                    }
+                } else {
+                    // Display error message if verification fails
+                    alert('OTP verification failed: ' + data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error)); // Handle errors
+        });
+    </script>
+</body>
+</html>

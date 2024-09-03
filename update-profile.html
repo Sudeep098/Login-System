@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Profile</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container login-container">
+        <div>
+            <h2>Update Your Profile</h2>
+            <!-- Corrected form ID and class attribute syntax -->
+            <form id="updateProfileForm" class="login-form" method="POST">
+                <!-- Removed unnecessary commented input -->
+                
+                <div class="form-group login-form">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group login-form">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="yourid@example.com" required>
+                </div>
+                <div class="form-group login-form">
+                    <label for="company">Company:</label>
+                    <input type="text" id="company" name="company" required>
+                </div>
+                <div class="form-group login-form">
+                    <label for="state">State:</label>
+                    <input type="text" id="state" name="state" required>
+                </div>
+                <div class="form-group login-form">
+                    <label for="city">City:</label>
+                    <input type="text" id="city" name="city" required>
+                </div>
+                <div class="form-group login-form">
+                    <label for="sponsor_code">Sponsor Code:</label>
+                    <input type="text" id="sponsor_code" name="sponsor_code" required>
+                </div>
+                <input type="hidden" id="access_token" name="access_token">
+                <input type="submit" id="up-btn" value="Update Profile">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("access_token").value = access_token=sessionStorage.getItem('access_token');
+        var name=document.getElementById('name').value;
+        sessionStorage.setItem('name', name);
+        
+        console.log(access_token);
+        document.getElementById('updateProfileForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the form from submitting normally
+
+    var formData = new FormData(this);
+
+    // Log form data for debugging
+    for (var pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
+
+    // Make a POST request to the server
+    fetch('http://localhost/login/update-profile.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        if (data.message === 'Profile updated successfylly') {
+            sessionStorage.setItem("name",document.getElementById("name").value);
+            fetch('http://localhost/login/welcome.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json' 
+    },
+    body: { 
+        "name": document.getElementById('name').value,
+        "game":"good"
+    }
+})
+.then(response => response.json())
+.then(data => console.log('Success:', data))
+.catch(error => console.error('Error:', error));
+
+            window.location.href = 'welcome.php';
+        } else {
+            alert(data.message);
+            if (data.message==='Profile updated successfully'){
+                sessionStorage.setItem("name",document.getElementById("name").value);
+                window.location.href = 'welcome.php';
+
+            }
+        }
+    })
+    .catch(error => console.error('Error:', error));
+});
+
+    </script>
+</body>
+</html>
